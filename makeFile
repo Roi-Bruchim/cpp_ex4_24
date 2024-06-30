@@ -1,0 +1,28 @@
+# Compiler and flags
+CXX = g++
+CXXFLAGS = -std=c++11
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+
+# Sources and targets
+MAIN_SOURCES = main.cpp
+TEST_SOURCES = test.cpp
+HEADERS = tree.hpp tree.tpp
+MAIN_TARGET = tree
+TEST_TARGET = test
+
+all: $(MAIN_TARGET) $(TEST_TARGET)
+
+$(MAIN_TARGET): $(MAIN_SOURCES) $(HEADERS)
+    $(CXX) $(CXXFLAGS) $(MAIN_SOURCES) -o $(MAIN_TARGET) $(LDFLAGS)
+
+$(TEST_TARGET): $(TEST_SOURCES) $(HEADERS)
+    $(CXX) $(CXXFLAGS) $(TEST_SOURCES) -o $(TEST_TARGET) $(LDFLAGS)
+
+run_test: $(TEST_TARGET)
+    ./$(TEST_TARGET)
+
+run_tree: $(MAIN_TARGET)
+    ./$(MAIN_TARGET)
+
+clean:
+    rm -f $(MAIN_TARGET) $(TEST_TARGET) *.o
