@@ -291,7 +291,7 @@ typename Tree<T>::HeapIterator Tree<T>::end_heap() {
     return HeapIterator(nullptr);
 }
 
-// Help by chatGPT to draw the tree
+// Visualization using SFML
 
 template <typename T>
 int getTreeWidth(const shared_ptr<TreeNode<T>>& node) {
@@ -315,6 +315,26 @@ void drawTree(sf::RenderWindow& window, const shared_ptr<TreeNode<T>>& node, int
     circle.setOutlineColor(sf::Color::White);
     circle.setOutlineThickness(2);
 
+    sf::Font font;
+    if (!font.loadFromFile("Arial.ttf")) { // Ensure this path is correct
+        std::cerr << "Could not load font\n";
+        return;
+    }
+
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(15);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(x - radius / 2, y - radius / 2);
+
+    std::ostringstream stream;
+    if constexpr (std::is_floating_point<T>::value) {
+        stream << std::fixed << std::setprecision(2) << node->key;
+    } else {
+        stream << node->key;
+    }
+    text.setString(stream.str());
+
     int childX = x - totalWidth / 2;
 
     for (const auto& child : node->children) {
@@ -334,6 +354,7 @@ void drawTree(sf::RenderWindow& window, const shared_ptr<TreeNode<T>>& node, int
     }
 
     window.draw(circle);
+    window.draw(text);
 }
 
 template <typename T>
